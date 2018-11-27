@@ -49,6 +49,6 @@ module.exports = {
 	devtool: false,
 	// devtool: 'inline-source-map',
 	externals: {
-		'gscatterjs-core': 'gScatterJS'
+		'gscatterjs-core': 'GScatterJS'
 	}
 }
