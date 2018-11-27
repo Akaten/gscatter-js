@@ -1,6 +1,6 @@
 {
-	"name": "scatterjs",
-	"version": "1.0.0",
+	"name": "gscatterjs",
+	"version": "0.0.1",
 	"description": "",
 	"scripts": {
 		"postinstall": "lerna bootstrap",
@@ -12,7 +12,7 @@
 		"test-eosjs": "concurrently \"lerna exec -- babel --watch --config ../../.babelrc --out-dir dist src\" \"cd mock-sites/eosjs-esm && npm run start\"",
 		"pack": "webpack-cli --mode=production --display-error-details"
 	},
-	"author": "GetScatter",
+	"author": "940101379@qq.com",
 	"license": "ISC",
 	"dependencies": {
 		"@babel/cli": "^7.0.0",

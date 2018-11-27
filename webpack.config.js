@@ -6,11 +6,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const getPackagePath = x => `./packages/${x}/src/index.js`;
 
 const packageFiles = [
-	'core',
-	'plugin-eosjs',
-	'plugin-eosjs2',
-	'plugin-web3',
-	'plugin-tron',
+	'core'
 ];
 
 const entry = packageFiles.reduce((o, file) => Object.assign(o, {[`${file}.min.js`]: getPackagePath(file)}), {});
@@ -20,7 +16,7 @@ module.exports = {
 	entry,
 	output: {
 		path: path.resolve(__dirname, './bundles'),
-		filename: 'scatterjs-[name]'
+		filename: 'gscatterjs-[name]'
 	},
 	resolve: {
 		modules:[
@@ -53,6 +49,6 @@ module.exports = {
 	devtool: false,
 	// devtool: 'inline-source-map',
 	externals: {
-		'scatterjs-core': 'ScatterJS'
+		'gscatterjs-core': 'gScatterJS'
 	}
 }
