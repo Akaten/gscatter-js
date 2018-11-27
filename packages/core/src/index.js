@@ -12,8 +12,11 @@ const throwNoAuth = () => {
         throw new Error('Connect and Authenticate first - gscatter.connect( pluginName )');
 };
 
-const checkForExtension = (resolve, tries = 0) => {
-    if(tries > 20) return;
+const checkForExtension = (resolve,reject, tries = 0) => {
+    if(tries > 30) {
+        reject(false);
+        return;
+    }
     if(holder.gscatter.isExtension) return resolve(true);
     setTimeout(() => checkForExtension(resolve, tries + 1), 100);
 };
@@ -39,7 +42,7 @@ class Index {
 	}
 
     async connect(pluginName, options){
-        return new Promise(resolve => {
+        return new Promise((resolve,reject) => {
             if(!pluginName || !pluginName.length) throw new Error("You must specify a name for this connection");
 
             // Setting options defaults
@@ -51,15 +54,15 @@ class Index {
             }, options.initTimeout);
 
             // Defaults to gscatter extension if exists
-            checkForExtension(resolve);
+            checkForExtension(resolve,reject);
 
             // Tries to set up Desktop Connection
-            SocketService.init(pluginName, options.linkTimeout);
-            SocketService.link().then(async authenticated => {
-                if(!authenticated) return false;
-                this.identity = await this.getIdentityFromPermissions();
-                return resolve(true);
-            });
+            // SocketService.init(pluginName, options.linkTimeout);
+            // SocketService.link().then(async authenticated => {
+            //     if(!authenticated) return false;
+            //     this.identity = await this.getIdentityFromPermissions();
+            //     return resolve(true);
+            // });
         })
     }
 
