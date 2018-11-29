@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>gscatter测试页面</title>
+    <title>gscatter test page</title>
     <script src="../../bundles/gscatterjs-core.min.js"></script>
 </head>
 
 <body>
-
+    <h3 id="accountName"></h3>
     <button onclick="login()">Login</button>
     <button onclick="logout()">Logout</button>
     <button onclick="transfer()">Transfer</button>
@@ -30,15 +30,33 @@
             personal: ['firstname', 'lastname', 'email', 'birthdate']
         };
 
+        const accountNameElem = document.getElementById('accountName')
+
         let gscatter, gxc;
+
+        function setAccountName(account) {
+            accountNameElem.innerText = account.name + ', welcome!'
+        }
+
+        function clearAccountName(account) {
+            accountNameElem.innerText = ''
+        }
 
         GScatterJS.gscatter.connect('exampleApp').then(connected => {
             if (!connected) return false;
+            let account
             gscatter = GScatterJS.gscatter;
             // require version, if user's plugin is less than the version, when operate, plugin will prompt a tips
             // gscatter.requireVersion('9.9.9')
+
             // when user not login, you could use api which not need identity, like generateKey
             gxc = gscatter.gxc(network);
+
+            // if identity exist, means user has authorize the website and already unlock, you could display user info then
+            if(gscatter.identity){
+                account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
+                setAccountName(account)
+            }
         });
 
         window.login = async () => {
@@ -60,13 +78,16 @@
                 return;
             }
 
+            // you could get gscatter.identity.accounts because of { accounts: [network] } before
             const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
+            setAccountName(account)
             gxc = gscatter.gxc(network);
         };
 
         window.logout = () => {
             try {
                 gscatter.forgetIdentity();
+                clearAccountName()
             } catch (err) {
                 // no identity found
                 console.error(err)
