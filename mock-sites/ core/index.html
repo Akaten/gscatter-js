@@ -12,7 +12,8 @@
     <button onclick="login()">Login</button>
     <button onclick="logout()">Logout</button>
     <button onclick="transfer()">Transfer</button>
-    <button onclick="contract()">Contract</button>
+    <button onclick="contract()">Call Contract</button>
+    <button onclick="vote()">Vote</button>
     <button onclick="generateKey()">Generate Key</button>
     <button onclick="queryAccount()">Query Account By Name</button>
 
@@ -74,7 +75,7 @@
 
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
-            gxc.transfer('youxiu123', 'memo info', '1 GXC', true, {requiredFields}).then(trx => {
+            gxc.transfer('youxiu123', 'memo info', '1 GXC', true, { requiredFields }).then(trx => {
                 console.log(`succcccc`, trx);
             }).catch(error => {
                 console.error(error);
@@ -84,6 +85,14 @@
         window.contract = () => {
             gxc.callContract('lzydododo', 'hi', { user: 'lzy' }, 0, true).then(trx => {
                 console.log(`succcccc`, trx);
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+
+        window.vote = () => {
+            gxc.vote(['math-wallet-test', 'gxc-pacific'], 'GXC', true).then(trx => {
+                console.log(`vote success`, trx);
             }).catch(error => {
                 console.error(error);
             });
