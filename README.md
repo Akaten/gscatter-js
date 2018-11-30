@@ -273,6 +273,25 @@ More details about required fields you can check [here](https://get-scatter.com/
 
 
 
+### Invite user to download extension
+
+User may not have the extension, you can invite him/her to download:
+
+```javascript
+// don't have extension
+if(!GScatterJS.gscatter.isExtension){
+    var flag = confirm('You haven\'t download extension, confirm to download')
+    if(flag){
+        // if installed, nothing hapen
+        GScatterJS.openExtensionPage()
+    }
+}
+```
+
+
+
+
+
 ### Error Codes
 
 You can handle error according to the error code below:
