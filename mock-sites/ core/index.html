@@ -42,7 +42,7 @@
             accountNameElem.innerText = ''
         }
 
-        GScatterJS.gscatter.connect('exampleApp').then(connected => {
+        GScatterJS.gscatter.connect('exampleApp').then(async connected => {
             if (!connected) return false;
             let account
             gscatter = GScatterJS.gscatter;
@@ -81,7 +81,6 @@
             // you could get gscatter.identity.accounts because of { accounts: [network] } before
             const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
             setAccountName(account)
-            gxc = gscatter.gxc(network);
         };
 
         window.logout = () => {
@@ -97,7 +96,7 @@
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
             gxc.transfer('youxiu123', 'memo info', '1 GXC', true, { requiredFields }).then(trx => {
-                console.log(`succcccc`, trx);
+                console.log(`transfer success`, trx);
             }).catch(error => {
                 console.error(error);
             });
@@ -105,7 +104,7 @@
 
         window.contract = () => {
             gxc.callContract('lzydododo', 'hi', { user: 'lzy' }, 0, true).then(trx => {
-                console.log(`succcccc`, trx);
+                console.log(`call contract success`, trx);
             }).catch(error => {
                 console.error(error);
             });
