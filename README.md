@@ -4,7 +4,7 @@
 
 This repo is for developer.
 
-You can use it to interact with chrome gscatter extension.
+You can use it to interact with chrome gscatter extension, check [here](https://github.com/gxchain/ScatterWebExtension).
 
 
 
