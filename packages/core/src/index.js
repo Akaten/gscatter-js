@@ -217,7 +217,13 @@ class Holder {
 		if (!this.gscatter.isExtension) {
 			plugins.map(plugin => this.gscatter.loadPlugin(plugin));
 		}
-	}
+    }
+    
+    openExtensionPage(){
+        if (!this.gscatter.isExtension) {
+			window.open('https://github.com/gxchain/ScatterWebExtension/');
+		}
+    }
 }
 
 

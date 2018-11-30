@@ -16,6 +16,7 @@
     <button onclick="vote()">Vote</button>
     <button onclick="generateKey()">Generate Key</button>
     <button onclick="queryAccount()">Query Account By Name</button>
+    <button onclick="checkExtension()">Check Extension</button>
 
     <script>
         const network = {
@@ -129,6 +130,17 @@
         window.queryAccount = async () => {
             const account = await gxc.getAccount('lzydophin94')
             console.log(account)
+        }
+
+        window.checkExtension = () => {
+            // don't have extension
+            if(!GScatterJS.gscatter.isExtension){
+                var flag = confirm('You haven\'t download extension, confirm to download')
+                if(flag){
+                    // if installed, nothing hapen
+                    GScatterJS.openExtensionPage()
+                }
+            }
         }
     </script>
 </body>
