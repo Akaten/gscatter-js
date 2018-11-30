@@ -98,6 +98,9 @@
             gxc.transfer('youxiu123', 'memo info', '1 GXC', true, { requiredFields }).then(trx => {
                 console.log(`transfer success`, trx);
             }).catch(error => {
+                if(error.code === 432){
+                    alert('you don\'t authorize identity!')
+                }
                 console.error(error);
             });
         };

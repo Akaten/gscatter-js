@@ -255,6 +255,51 @@ More details about required fields you can check [here](https://get-scatter.com/
 
 
 
+### Error Codes
+
+You can handle error according to the error code below:
+
+```javascript
+{
+    NO_SIGNATURE: 402,
+
+    FORBIDDEN: 403,
+
+    TIMED_OUT: 408,
+
+    LOCKED: 423,
+
+    UPGRADE_REQUIRED: 426,
+
+    TOO_MANY_REQUESTS: 429,
+
+    ENCRYPT_MEMO_ERROR: 430,
+
+    BUILD_DISPLAY_MESSAGE_ERROR: 431,
+
+    NO_IDENTITY: 432
+}
+```
+
+
+
+example:
+
+```javascript
+gxc.transfer('toAccount', 'memo info', '1 GXC', true, {requiredFields}).then(trx => {
+	console.log(`transfer success`, trx);
+}).catch(error => {
+    if(error.code === 432){
+    	alert('you don\'t authorize identity!')
+    }
+	console.error(error);
+});
+```
+
+
+
+
+
 ### Scatter api support
 
 only support `useIdentity` `suggestNetwork` `getIdentity` `authenticate` `forgetIdentity` `requireVersion` .
