@@ -1,5 +1,13 @@
 # GScatter JS
 
+## Overview
+
+This repo is for developer.
+
+You can use it to interact with chrome gscatter extension.
+
+
+
 
 ## Installation
 
@@ -20,7 +28,7 @@ If you're having trouble packaging or compiling your project you probably need t
 
 
 
-## Importing GScatterJS into your project.
+## Importing into your project.
 
 You should be doing this early in your application, somewhere like
 your main.js or app.js, and not inside sub-pages.
@@ -31,7 +39,17 @@ import ScatterJS from 'gscatterjs-core';
 
 
 
-## GScatterJS Usage
+## Usage
+
+### Demo
+
+Clone this repo, change to the directory, then serve the directory, you can use [puer](https://github.com/leeluolee/puer).
+
+Then open `mock-sites/core/index.html`.
+
+**Don't use file protocal to open it.**
+
+
 
 ### Making a connection
 This usage is reserved for the future, now it doesn't make any sense, but required.
