@@ -34,7 +34,7 @@ You should be doing this early in your application, somewhere like
 your main.js or app.js, and not inside sub-pages.
 
 ```js
-import ScatterJS from 'gscatterjs-core';
+import GScatterJS from 'gscatterjs-core';
 ```
 
 
