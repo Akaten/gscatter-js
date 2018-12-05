@@ -51,6 +51,14 @@ Then open `mock-sites/core/index.html`.
 
 
 
+### Judge whether extension installed
+
+```javascript
+GScatterJS.gscatter.isExtension
+```
+
+
+
 ### Making a connection
 This usage is reserved for the future, now it doesn't make any sense, but required.
 
