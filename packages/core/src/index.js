@@ -221,7 +221,7 @@ class Holder {
     
     openExtensionPage(){
         if (!this.gscatter.isExtension) {
-			window.open('https://github.com/gxchain/ScatterWebExtension/');
+			window.open('https://gxchain.github.io/GScatter/arch/guide/');
 		}
     }
 }
