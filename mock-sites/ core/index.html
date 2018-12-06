@@ -16,6 +16,7 @@
     <button onclick="vote()">Vote</button>
     <button onclick="generateKey()">Generate Key</button>
     <button onclick="queryAccount()">Query Account By Name</button>
+    <button onclick="getBalance()">Get Balance</button>
     <button onclick="checkExtension()">Check Extension</button>
 
     <script>
@@ -54,7 +55,7 @@
             gxc = gscatter.gxc(network);
 
             // if identity exist, means user has authorize the website and already unlock, you could display user info then
-            if(gscatter.identity){
+            if (gscatter.identity) {
                 account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
                 setAccountName(account)
             }
@@ -99,7 +100,7 @@
             gxc.transfer('youxiu123', 'memo info', '1 GXC', true, { requiredFields }).then(trx => {
                 console.log(`transfer success`, trx);
             }).catch(error => {
-                if(error.code === 432){
+                if (error.code === 432) {
                     alert('you don\'t authorize identity!')
                 }
                 console.error(error);
@@ -132,11 +133,20 @@
             console.log(account)
         }
 
+        window.getBalance = () => {
+            const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
+            gxc.getAccountBalances(account.name).then(res => {
+                console.log('balances:', res)
+            }).catch(err => {
+                console.error(err)
+            })
+        }
+
         window.checkExtension = () => {
             // don't have extension
-            if(!GScatterJS.gscatter.isExtension){
+            if (!GScatterJS.gscatter.isExtension) {
                 var flag = confirm('You haven\'t download extension, confirm to download')
-                if(flag){
+                if (flag) {
                     // if installed, nothing hapen
                     GScatterJS.openExtensionPage()
                 }
