@@ -62,9 +62,10 @@
         });
 
         window.login = async () => {
+            let identity
             try {
                 // if you want user add the network, you could call suggestNetwork, if user already has, nothing happen
-                await gscatter.suggestNetwork(network);
+                // await gscatter.suggestNetwork(network);
             } catch (err) {
                 // user refuse or close the prompt window
                 console.error(err)
@@ -73,7 +74,7 @@
 
             try {
                 // required fields, it will appear at gscatter.identity
-                await gscatter.getIdentity({ accounts: [network] })
+                identity = await gscatter.getIdentity({ accounts: [network],personal:['email', 'phone'] })
             } catch (err) {
                 // user refuse or close the prompt window
                 console.error(err)
@@ -85,9 +86,9 @@
             setAccountName(account)
         };
 
-        window.logout = () => {
+        window.logout = async () => {
             try {
-                gscatter.forgetIdentity();
+                await gscatter.forgetIdentity();
                 clearAccountName()
             } catch (err) {
                 // no identity found
