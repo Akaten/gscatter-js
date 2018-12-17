@@ -322,7 +322,10 @@ You can handle error according to the error code below:
 
     BUILD_DISPLAY_MESSAGE_ERROR: 431,
 
-    NO_IDENTITY: 432
+    NO_IDENTITY: 432,
+    
+    // all uncategoried error put here
+    UN_DEF_ERROR: 433
 }
 ```
 
