@@ -65,7 +65,7 @@
             let identity
             try {
                 // if you want user add the network, you could call suggestNetwork, if user already has, nothing happen
-                // await gscatter.suggestNetwork(network);
+                await gscatter.suggestNetwork(network);
             } catch (err) {
                 // user refuse or close the prompt window
                 console.error(err)
@@ -74,7 +74,7 @@
 
             try {
                 // required fields, it will appear at gscatter.identity
-                identity = await gscatter.getIdentity({ accounts: [network],personal:['email', 'phone'] })
+                identity = await gscatter.getIdentity({ accounts: [network] })
             } catch (err) {
                 // user refuse or close the prompt window
                 console.error(err)
@@ -98,7 +98,7 @@
 
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
-            gxc.transfer('youxiu123', 'memo info', '1 GXC', true, { requiredFields }).then(trx => {
+            gxc.transfer('youxiu123', 'memo info', '1 GXC', true).then(trx => {
                 console.log(`transfer success`, trx);
             }).catch(error => {
                 if (error.code === 432) {
