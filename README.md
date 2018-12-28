@@ -4,7 +4,7 @@
 
 This repo is for developer.
 
-You can use it to interact with chrome gscatter extension, check [here](https://github.com/gxchain/ScatterWebExtension).
+You can use it to interact with user in chrome by [chrome gscatter extension](https://github.com/gxchain/ScatterWebExtension), or in blockcity (haven't prepared yet), which support in box.
 
 
 
@@ -40,6 +40,8 @@ import GScatterJS from 'gscatterjs-core';
 
 
 ## Network
+
+**blockcity**: you can not choose network in blockcity, it will depend on blockcity app environment.
 
 ### Main Net
 
@@ -77,13 +79,13 @@ const network = {
 
 Clone this repo, change to the directory, then serve the directory, you can use [puer](https://github.com/leeluolee/puer).
 
-Then open `mock-sites/core/index.html`.
+Then open `mock-sites/browser/index.html` in chrome to test gscatter chrome extension, or open `mock-sites/blockcity/index.html` in blockcity to test blockcity inject.
 
 **Don't use file protocal to open it.**
 
 
 
-### Judge whether extension installed
+### Judge whether extension installed(or injected in blockcity)
 
 ```javascript
 GScatterJS.gscatter.isExtension
@@ -172,6 +174,8 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
 
 
 ### Logout
+
+**blockcity**: not support real logout, if call `forgetIdentity` , will throw an error.
 
 ```javascript
 let gscatter;
@@ -281,6 +285,8 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
 
 ### Required fields
 
+**blockcity**: not support required fields, if you pass, relative field will return empty.
+
 You can require specific fields to be given back to your app from a user's Identity on both Identity Requests and Signature Requests. 
 
 
@@ -315,11 +321,11 @@ More details about required fields you can check [here](https://get-scatter.com/
 
 ### Invite user to download extension
 
-User may not have the extension, you can invite him/her to download:
+If in chrome, user may not have the extension, you can invite him/her to download:
 
 ```javascript
 // don't have extension
-if(!GScatterJS.gscatter.isExtension){
+if(!GScatterJS.gscatter.isExtension && (GScatterJS.gscatter.host === 'browser')){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
         // if installed, nothing hapen
@@ -330,14 +336,26 @@ if(!GScatterJS.gscatter.isExtension){
 
 
 
+### Recognize host
+
+```javascript
+GScatterJS.gscatter.host === 'browser'	// gscatter chrome extension
+GScatterJS.gscatter.host === 'blockcity'	// blockcity env
+```
+
+
+
 
 
 ### Error Codes
 
 You can handle error according to the error code below:
 
+**browser**:
+
 ```javascript
 {
+    // if user reject transaction(like transfer or callContract), will return this code
     NO_SIGNATURE: 402,
 
     FORBIDDEN: 403,
@@ -360,6 +378,24 @@ You can handle error according to the error code below:
     UN_DEF_ERROR: 433
 }
 ```
+
+
+
+**blockcity**:
+
+```javascript
+{
+    NO_SIGNATURE: 402,	// same with browser
+        
+    UN_DEF_ERROR: 433,	// same with browser
+        
+    PASSWORD_ERROR: 434,	// password error
+        
+    NO_IDENTITY: 435	// when call vote、callContract、transfer which need account, if user don't have account，will throw this error
+}
+```
+
+
 
 
 

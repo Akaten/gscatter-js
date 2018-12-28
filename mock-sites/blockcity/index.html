@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>gscatter test page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>gscatter blockcity test</title>
     <script src="../../bundles/gscatterjs-core.min.js"></script>
 </head>
 
 <body>
     <h3 id="accountName"></h3>
+
     <button onclick="login()">Login</button>
     <button onclick="logout()">Logout</button>
     <button onclick="transfer()">Transfer</button>
@@ -19,6 +21,7 @@
     <button onclick="getBalance()">Get Balance</button>
     <button onclick="checkExtension()">Check Extension</button>
 
+    <button onclick="getIdentity()">getIdentity</button>
     <script>
         const network = {
             blockchain: 'gxc',
@@ -35,6 +38,20 @@
         const accountNameElem = document.getElementById('accountName')
 
         let gscatter, gxc;
+
+        function output() {
+            const combined = Array.from(arguments).map(arg => {
+                if (typeof arg === 'object') {
+                    return JSON.stringify(arg)
+                } else {
+                    return arg
+                }
+            })
+
+            console.log(...arguments)
+
+            alert(combined.join('\n--------------\n'))
+        }
 
         function setAccountName(account) {
             accountNameElem.innerText = account.name + ', welcome!'
@@ -62,28 +79,9 @@
         });
 
         window.login = async () => {
-            let identity
-            try {
-                // if you want user add the network, you could call suggestNetwork, if user already has, nothing happen
-                await gscatter.suggestNetwork(network);
-            } catch (err) {
-                // user refuse or close the prompt window
-                console.error(err)
-                return;
-            }
-
-            try {
-                // required fields, it will appear at gscatter.identity
-                identity = await gscatter.getIdentity({ accounts: [network] })
-            } catch (err) {
-                // user refuse or close the prompt window
-                console.error(err)
-                return;
-            }
-
-            // you could get gscatter.identity.accounts because of { accounts: [network] } before
-            const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
-            setAccountName(account)
+            // required fields, it will appear at gscatter.identity
+            const identity = await gscatter.getIdentity({ accounts: [network] })
+            output(identity)
         };
 
         window.logout = async () => {
@@ -92,54 +90,58 @@
                 clearAccountName()
             } catch (err) {
                 // no identity found
-                console.error(err)
+                output(err)
             }
         };
 
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
-            gxc.transfer('youxiu123', 'memo info', '1 GXC', true).then(trx => {
-                console.log(`transfer success`, trx);
+            gxc.transfer('jaredliu233', 'memo info', '1 GXC', true).then(trx => {
+                output(`transfer success`, trx);
             }).catch(error => {
-                if (error.code === 432) {
-                    alert('you don\'t authorize identity!')
-                }
-                console.error(error);
+                output(error);
             });
         };
 
         window.contract = () => {
-            gxc.callContract('lzydododo', 'hi', { user: 'lzy' }, 0, true).then(trx => {
-                console.log(`call contract success`, trx);
+            gxc.callContract('bank', 'deposit', {}, '1 GXC', true).then(trx => {
+                output(`call contract success`, trx);
             }).catch(error => {
-                console.error(error);
+                output(error);
             });
         }
 
         window.vote = () => {
-            gxc.vote(['math-wallet-test', 'gxc-pacific'], 'GXC', true).then(trx => {
-                console.log(`vote success`, trx);
+            gxc.vote(['init0', 'init2'], 'GXC', true).then(trx => {
+                output(`vote success`, trx);
             }).catch(error => {
-                console.error(error);
+                output(error);
             });
         }
 
         window.generateKey = async () => {
             const key = await gxc.generateKey()
-            console.log(key)
+            output(key)
         }
 
         window.queryAccount = async () => {
-            const account = await gxc.getAccount('lzydophin94')
-            console.log(account)
+            let account
+            try {
+                account = await gxc.getAccount('jaredliu')
+            } catch (err) {
+                output(err)
+                return
+            }
+
+            output(account)
         }
 
         window.getBalance = () => {
             const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
             gxc.getAccountBalances(account.name).then(res => {
-                console.log('balances:', res)
+                output(`balances`, res)
             }).catch(err => {
-                console.error(err)
+                output(err)
             })
         }
 
@@ -152,6 +154,11 @@
                     GScatterJS.openExtensionPage()
                 }
             }
+        }
+
+        window.getIdentity = async () => {
+            const identity = await gscatter.getIdentity()
+            output(identity)
         }
     </script>
 </body>
