@@ -325,7 +325,7 @@ If in chrome, user may not have the extension, you can invite him/her to downloa
 
 ```javascript
 // don't have extension
-if(!GScatterJS.gscatter.isExtension && (GScatterJS.gscatter.host === 'browser')){
+if(!GScatterJS.gscatter.isExtension){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
         // if installed, nothing hapen
@@ -333,17 +333,6 @@ if(!GScatterJS.gscatter.isExtension && (GScatterJS.gscatter.host === 'browser'))
     }
 }
 ```
-
-
-
-### Recognize host
-
-```javascript
-GScatterJS.gscatter.host === 'browser'	// gscatter chrome extension
-GScatterJS.gscatter.host === 'blockcity'	// blockcity env
-```
-
-
 
 
 
