@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>gscatter blockcity test</title>
+    <title>gscatter test page</title>
     <script src="../../bundles/gscatterjs-core.min.js"></script>
 </head>
 
@@ -19,9 +19,8 @@
     <button onclick="generateKey()">Generate Key</button>
     <button onclick="queryAccount()">Query Account By Name</button>
     <button onclick="getBalance()">Get Balance</button>
-    <button onclick="checkExtension()">Check Extension</button>
-
     <button onclick="getIdentity()">getIdentity</button>
+    <!-- <img src="https://edmullen.net/test/rc.jpg" alt=""> -->
     <script>
         const network = {
             blockchain: 'gxc',
@@ -33,11 +32,32 @@
 
         const requiredFields = {
             personal: ['firstname', 'lastname', 'email', 'birthdate']
-        };
+        }
 
         const accountNameElem = document.getElementById('accountName')
 
-        let gscatter, gxc;
+        let gscatter
+        let gxc
+        let testData
+        var url = new URL(location.href)
+        const env = url.searchParams.get('env') || 'test'
+
+        if (env === 'dev') {
+            testData = {
+                account1: 'jaredliu',
+                callContractParams: ['bank', 'deposit', {}, '1 GXC', true]
+            }
+        } else if (env === 'test') {
+            testData = {
+                account1: 'lzydophin94',
+                callContractParams: ['bank', 'deposit', {}, '1 GXC', true]
+            }
+        } else { // 线上
+            testData = {
+                account1: 'jaime94',
+                callContractParams: ['book', 'hi', {}, 0, true]
+            }
+        }
 
         function output() {
             const combined = Array.from(arguments).map(arg => {
@@ -62,61 +82,61 @@
         }
 
         GScatterJS.gscatter.connect('exampleApp').then(async connected => {
-            if (!connected) return false;
+            if (!connected) return false
             let account
-            gscatter = GScatterJS.gscatter;
+            gscatter = GScatterJS.gscatter
             // require version, if user's plugin is less than the version, when operate, plugin will prompt a tips
             // gscatter.requireVersion('9.9.9')
 
             // when user not login, you could use api which not need identity, like generateKey
-            gxc = gscatter.gxc(network);
+            gxc = gscatter.gxc(network)
 
             // if identity exist, means user has authorize the website and already unlock, you could display user info then
             if (gscatter.identity) {
-                account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
+                account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc')
                 setAccountName(account)
             }
-        });
+        })
 
         window.login = async () => {
             // required fields, it will appear at gscatter.identity
             const identity = await gscatter.getIdentity({ accounts: [network] })
             output(identity)
-        };
+        }
 
         window.logout = async () => {
             try {
-                await gscatter.forgetIdentity();
+                await gscatter.forgetIdentity()
                 clearAccountName()
             } catch (err) {
                 // no identity found
                 output(err)
             }
-        };
+        }
 
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
-            gxc.transfer('jaredliu233', 'memo info', '1 GXC', true).then(trx => {
-                output(`transfer success`, trx);
+            gxc.transfer(testData.account1, 'memo info', '1 GXC', true).then(trx => {
+                output(`transfer success`, trx)
             }).catch(error => {
-                output(error);
-            });
-        };
+                output(error)
+            })
+        }
 
         window.contract = () => {
-            gxc.callContract('bank', 'deposit', {}, '1 GXC', true).then(trx => {
-                output(`call contract success`, trx);
+            gxc.callContract.apply(gxc, testData.callContractParams).then(trx => {
+                output(`call contract success`, trx)
             }).catch(error => {
-                output(error);
-            });
+                output(error)
+            })
         }
 
         window.vote = () => {
             gxc.vote(['init0', 'init2'], 'GXC', true).then(trx => {
-                output(`vote success`, trx);
+                output(`vote success`, trx)
             }).catch(error => {
-                output(error);
-            });
+                output(error)
+            })
         }
 
         window.generateKey = async () => {
@@ -127,7 +147,7 @@
         window.queryAccount = async () => {
             let account
             try {
-                account = await gxc.getAccount('jaredliu')
+                account = await gxc.getAccount(testData.account1)
             } catch (err) {
                 output(err)
                 return
@@ -137,28 +157,34 @@
         }
 
         window.getBalance = () => {
-            const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
-            gxc.getAccountBalances(account.name).then(res => {
-                output(`balances`, res)
-            }).catch(err => {
-                output(err)
-            })
-        }
-
-        window.checkExtension = () => {
-            // don't have extension
-            if (!GScatterJS.gscatter.isExtension) {
-                var flag = confirm('You haven\'t download extension, confirm to download')
-                if (flag) {
-                    // if installed, nothing hapen
-                    GScatterJS.openExtensionPage()
-                }
+            const account = gscatter.identity && gscatter.identity.accounts.find(x => x.blockchain === 'gxc')
+            if (!account) {
+                alert('没有钱包，请导入')
+            } else {
+                gxc.getAccountBalances(account.name).then(res => {
+                    output(`balances`, res)
+                }).catch(err => {
+                    output(err)
+                })
             }
         }
 
         window.getIdentity = async () => {
             const identity = await gscatter.getIdentity()
             output(identity)
+        }
+    </script>
+    <script>
+        var url = new URL(location.href)
+        const isRej = +url.searchParams.get('rejScatter')
+        if (isRej === 1) {
+            // ?rejScatter=1
+            const inject = document.createElement('script')
+
+            // puer -p 9999 --no-reload
+            inject.setAttribute('src', 'http://192.168.100.30:9999/dev/inject.js')
+
+            document.body.appendChild(inject)
         }
     </script>
 </body>
