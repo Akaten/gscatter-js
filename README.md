@@ -4,7 +4,7 @@
 
 This repo is for developer.
 
-You can use it to interact with user in chrome by [chrome gscatter extension](https://github.com/gxchain/ScatterWebExtension), or in blockcity (haven't prepared yet), which support in box.
+You can use it to interact with user in chrome by [chrome gscatter extension](https://github.com/gxchain/ScatterWebExtension), or in blockcity, which support in box.
 
 
 
