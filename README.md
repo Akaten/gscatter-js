@@ -428,3 +428,9 @@ Api which not need identity **all support**.
 
 
 More details you can check [here](https://github.com/gxchain/gxclient-node)
+
+
+
+## Debug
+
+Not support debug on blockcity yet, you could debug on chrome first, then it will pass on blockcity.
