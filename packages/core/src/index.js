@@ -4,8 +4,13 @@ import Plugin from './plugins/Plugin';
 import * as PluginTypes from './plugins/PluginTypes';
 import { Blockchains } from './models/Blockchains';
 import Network from './models/Network';
+import UserAgent from 'gxc-frontend-base/src/script/util/ua'
 
-let origin;
+const ua = new UserAgent()
+
+export const ENV_WEBVIEW = 'webview'
+export const ENV_MOBILE = 'mobile'
+export const ENV_PC = 'pc'
 
 const throwNoAuth = () => {
     if(!holder.gscatter.isExtension && !SocketService.isConnected())
@@ -221,8 +226,26 @@ class Holder {
     
     openExtensionPage(){
         if (!this.gscatter.isExtension) {
-			window.open('https://gxchain.github.io/GScatter/arch/guide/');
+            if(ua.MOBILE){
+                window.open('https://blockcity.gxb.io/download/');
+            }else if(ua.PC){
+                window.open('https://gxchain.github.io/GScatter/arch/guide/');
+            }
 		}
+    }
+
+    getEnv(){
+        if(ua.WEB_VIEW){
+            return ENV_WEBVIEW
+        }
+
+        if(ua.MOBILE){
+            return ENV_MOBILE
+        }
+
+        if(ua.PC){
+            return ENV_PC
+        }
     }
 }
 

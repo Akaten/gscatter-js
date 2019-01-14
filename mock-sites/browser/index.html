@@ -18,6 +18,7 @@
     <button onclick="queryAccount()">Query Account By Name</button>
     <button onclick="getBalance()">Get Balance</button>
     <button onclick="checkExtension()">Check Extension</button>
+    <button onclick="getEnv()">getEnv</button>
 
     <script>
         const network = {
@@ -152,6 +153,10 @@
                     GScatterJS.openExtensionPage()
                 }
             }
+        }
+
+        window.getEnv = () => {
+            alert(GScatterJS.getEnv())
         }
     </script>
 </body>

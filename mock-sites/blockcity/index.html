@@ -20,6 +20,8 @@
     <button onclick="queryAccount()">Query Account By Name</button>
     <button onclick="getBalance()">Get Balance</button>
     <button onclick="getIdentity()">getIdentity</button>
+    <button onclick="checkExtension()">Check Extension</button>
+    <button onclick="getEnv()">getEnv</button>
     <!-- <img src="https://edmullen.net/test/rc.jpg" alt=""> -->
     <script>
         const network = {
@@ -172,6 +174,21 @@
         window.getIdentity = async () => {
             const identity = await gscatter.getIdentity()
             output(identity)
+        }
+
+        window.checkExtension = () => {
+            // don't have extension
+            if (!GScatterJS.gscatter.isExtension) {
+                var flag = confirm('You haven\'t download extension, confirm to download')
+                if (flag) {
+                    // if installed, nothing hapen
+                    GScatterJS.openExtensionPage()
+                }
+            }
+        }
+
+        window.getEnv = () => {
+            alert(GScatterJS.getEnv())
         }
     </script>
     <script>
