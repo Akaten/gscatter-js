@@ -329,9 +329,18 @@ if(!GScatterJS.gscatter.isExtension){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
         // if installed, nothing hapen
+        // if not installed, jump to install page according to environment
         GScatterJS.openExtensionPage()
     }
 }
+```
+
+
+
+### Detect Environment
+
+```javascript
+Gscatter.getEnv()	// return 'webview'、'mobile'、'pc' according to environment
 ```
 
 
@@ -403,7 +412,7 @@ gxc.transfer('toAccount', 'memo info', '1 GXC', true, {requiredFields}).then(trx
 
 
 
-
+## API Support
 
 ### Scatter api support
 
@@ -428,6 +437,8 @@ Api which not need identity **all support**.
 
 
 More details you can check [here](https://github.com/gxchain/gxclient-node)
+
+
 
 
 
