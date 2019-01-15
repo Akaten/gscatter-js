@@ -103,6 +103,10 @@
         window.login = async () => {
             // required fields, it will appear at gscatter.identity
             const identity = await gscatter.getIdentity({ accounts: [network] })
+            if (identity) {
+                const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc')
+                setAccountName(account)
+            }
             output(identity)
         }
 
