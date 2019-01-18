@@ -4,7 +4,7 @@
 
 This repo is for developer.
 
-You can use it to interact with user in chrome by [chrome gscatter extension](https://github.com/gxchain/ScatterWebExtension), or in blockcity, which support in box.
+You can use it to interact with user in chrome by [chrome gscatter extension](https://github.com/gxchain/ScatterWebExtension), or in [blockcity](https://blockcity.gxb.io/download/), which support in box.
 
 
 
@@ -19,10 +19,10 @@ npm i -S gscatterjs-core
 
 
 
-### NodeJS and babel/webpack.
+### Build fail
 
-If you're having trouble packaging or compiling your project you probably need to add a babel transpiler.
-- `npm i -D @babel/runtime` <-- run this command and it should compile.
+If you're having trouble building your project you probably need to add a babel transpiler.
+- `npm i -D @babel/runtime`
 
 -------------
 
@@ -41,7 +41,7 @@ import GScatterJS from 'gscatterjs-core';
 
 ## Network
 
-**blockcity**: you can not choose network in blockcity, it will depend on blockcity app environment.
+**blockcity**: you can not choose network in blockcity, it's okay if you pass this which would be automatically omited.
 
 ### Main Net
 
@@ -79,13 +79,14 @@ const network = {
 
 Clone this repo, change to the directory, then serve the directory, you can use [puer](https://github.com/leeluolee/puer).
 
-Then open `mock-sites/browser/index.html` in chrome to test gscatter chrome extension, or open `mock-sites/blockcity/index.html` in blockcity to test blockcity inject.
+Then open `mock-sites/browser/index.html` in chrome to test gscatter chrome extension.
+Or upload your test demo on [developer center](https://developer.gxb.io/login.html), choose sandbox environment, and input website as `http://your.ip:port/mock-sites/blockcity/index.html`, then download [blockcity sandbox env](https://fir.im/blockcitysandbox) to experience.
 
 **Don't use file protocal to open it.**
 
 
 
-### Judge whether extension installed(or injected in blockcity)
+### Judge whether gscatter injected
 
 ```javascript
 GScatterJS.gscatter.isExtension
@@ -94,17 +95,17 @@ GScatterJS.gscatter.isExtension
 
 
 ### Making a connection
-This usage is reserved for the future, now it doesn't make any sense, but required.
+You can customize your app name.
+When `connected` return true, it means gscatter inject successfully.
 
 ```js
 
 GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
     if(!connected) {
-        // User does not have GScatter Plugin installed/unlocked.
         return false;
     }
     
-    // Use `gscatter` normally now.
+    // Use gscatter normally now.
     GScatterJS.gscatter.getIdentity(...);
 });
 ```
@@ -116,11 +117,11 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
 ```javascript
 GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
     if(!connected) {
-        // User does not have GScatter Plugin installed/unlocked.
         return false;
     }
     
-	// if identity exist, means user has authorize the website and already unlock, you could display account info then
+    // On pc browser, if identity exist, means user has authorize the website and already unlock.
+    // On blockcity, if identity exist, means user has imported gxchain wallet.
     if(gscatter.identity){
         account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
         displayAccountInfo(account)
@@ -139,7 +140,6 @@ let gscatter;
 
 GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
     if(!connected) {
-        // User does not have GScatter Plugin installed/unlocked.
         return false;
     }
     
@@ -182,7 +182,6 @@ let gscatter;
 
 GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
     if(!connected) {
-        // User does not have GScatter Plugin installed/unlocked.
         return false;
     }
     
@@ -197,7 +196,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
             gscatter.forgetIdentity();
             clearAccountInfo()
         } catch (err) {
-            // no identity found
+            // On pc browser may cause of no identity；On blockcity must throw error.
             console.error(err)
         }
     }
@@ -270,7 +269,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
     }
        
     transfer.click = async function(){
-        // if doesn't unlock, it would display unlock prompt; if doesn't login, it would display authorize prompt; if already login, it would display operation confirm prompt
+        // On pc browser, if doesn't unlock, it would display unlock prompt; if doesn't login, it would display authorize prompt; if already login, it would display operation confirm prompt
  		gxc.transfer('toAccount', 'memo info', '1 GXC', true).then(trx => {
                 console.log(`transfer success`, trx);
             }).catch(error => {
@@ -287,7 +286,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
 
 **blockcity**: not support required fields, if you pass, relative field will return empty.
 
-You can require specific fields to be given back to your app from a user's Identity on both Identity Requests and Signature Requests. 
+You can require specific fields to be given back to your app from a user's Identity on both Identity Requests and Signature Requests. Precondition is 
 
 
 
@@ -324,7 +323,7 @@ More details about required fields you can check [here](https://get-scatter.com/
 If in chrome, user may not have the extension, you can invite him/her to download:
 
 ```javascript
-// don't have extension
+// detect no inject
 if(!GScatterJS.gscatter.isExtension){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
