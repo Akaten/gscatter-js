@@ -1,4 +1,5 @@
 # GScatter JS
+中文版文档请查看[这里](https://github.com/gxchain/gscatter-js/blob/master/README-cn.md)
 
 ## Overview
 
