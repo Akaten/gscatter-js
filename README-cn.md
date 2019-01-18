@@ -1,5 +1,7 @@
 # GScatter JS
 
+English document click [here](https://github.com/gxchain/gscatter-js/blob/master/README.md).
+
 ## 概述
 
 此仓库供开发者使用。
