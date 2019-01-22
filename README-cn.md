@@ -6,7 +6,7 @@ English document click [here](https://github.com/gxchain/gscatter-js/blob/master
 
 此仓库供开发者使用。
 
-你可以用它跟使用[gscatter chrome插件](https://github.com/gxchain/ScatterWebExtension)或者[布洛克城](https://blockcity.gxb.io/download/)的用户交互。
+你可以用它跟使用[gscatter chrome插件](https://github.com/gxchain/GScatter)或者[布洛克城](https://blockcity.gxb.io/download/)的用户交互。
 
 
 
