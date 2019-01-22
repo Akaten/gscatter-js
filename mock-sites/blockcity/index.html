@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>gscatter test page</title>
     <script src="../../bundles/gscatterjs-core.min.js"></script>
+    <!-- <script src="../../packages/core/build/bundle.js"></script> -->
 </head>
 
 <body>
@@ -102,7 +103,7 @@
 
         window.login = async () => {
             // required fields, it will appear at gscatter.identity
-            const identity = await gscatter.getIdentity({ accounts: [network] })
+            const identity = await GScatterJS.gscatter.getIdentity({ accounts: [network] })
             if (identity) {
                 const account = gscatter.identity.accounts.find(x => x.blockchain === 'gxc')
                 setAccountName(account)
@@ -112,7 +113,7 @@
 
         window.logout = async () => {
             try {
-                await gscatter.forgetIdentity()
+                await GScatterJS.gscatter.forgetIdentity()
                 clearAccountName()
             } catch (err) {
                 // no identity found
@@ -176,7 +177,7 @@
         }
 
         window.getIdentity = async () => {
-            const identity = await gscatter.getIdentity()
+            const identity = await GScatterJS.gscatter.getIdentity()
             output(identity)
         }
 
@@ -192,7 +193,9 @@
         }
 
         window.getEnv = () => {
-            alert(GScatterJS.getEnv())
+            GScatterJS.getEnv().then((env) => {
+                alert(env)
+            })
         }
     </script>
     <script>

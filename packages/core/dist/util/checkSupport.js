@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=checkSupport;function placeholder(){}function checkSupport(){window.isSupportGScatter=window.isSupportGScatter||placeholder,window.notSupportGScatterCallback=window.notSupportGScatterCallback||placeholder,window.isSupportGScatter(window.notSupportGScatterCallback)}

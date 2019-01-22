@@ -156,7 +156,9 @@
         }
 
         window.getEnv = () => {
-            alert(GScatterJS.getEnv())
+            GScatterJS.getEnv().then((env) => {
+                alert(env)
+            })
         }
     </script>
 </body>

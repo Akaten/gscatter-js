@@ -5,53 +5,91 @@ import * as PluginTypes from './plugins/PluginTypes';
 import { Blockchains } from './models/Blockchains';
 import Network from './models/Network';
 import UserAgent from 'gxc-frontend-base/src/script/util/ua'
-
-const ua = new UserAgent()
+import { blockcityGlobalInject } from './util/blockcityUtil'
+import checkSupport from './util/checkSupport'
+import { GSCATTER_ENV } from './const/global'
 
 export const ENV_WEBVIEW = 'webview'
 export const ENV_MOBILE = 'mobile'
 export const ENV_PC = 'pc'
+export const ENV_BLOCKCITY = 'blockcity'
+
+const ua = new UserAgent()
+const getEnv = () => {
+    return new Promise((resolve) => {
+        // waiting host to inject global variable
+        setTimeout(() => {
+            if (!window[GSCATTER_ENV] && ua.WEB_VIEW) {
+                resolve(ENV_BLOCKCITY)
+            }
+
+            if (ua.WEB_VIEW) {
+                resolve(ENV_WEBVIEW)
+            }
+
+            if (ua.MOBILE) {
+                resolve(ENV_MOBILE)
+            }
+
+            if (ua.PC) {
+                resolve(ENV_PC)
+            }
+        }, 100)
+    })
+}
+
+const getEnvSingleInstance = getEnv()
+
+
+getEnvSingleInstance.then((env) => {
+    if (env === ENV_BLOCKCITY) {
+        // hack for blockcity, cause blockcity app didn't inject a global script
+        blockcityGlobalInject()
+    }
+
+    checkSupport()
+})
 
 const throwNoAuth = () => {
-    if(!holder.gscatter.isExtension && !SocketService.isConnected())
+    if (!holder.gscatter.isExtension && !SocketService.isConnected())
         throw new Error('Connect and Authenticate first - gscatter.connect( pluginName )');
 };
 
-const checkForExtension = (resolve,reject, tries = 0) => {
-    if(tries > 30) {
+const checkForExtension = (resolve, reject, tries = 0) => {
+    if (tries > 30) {
         reject(false);
         return;
     }
-    if(holder.gscatter.isExtension) return resolve(true);
+    if (holder.gscatter.isExtension) return resolve(true);
     setTimeout(() => checkForExtension(resolve, tries + 1), 100);
 };
 
 
 class Index {
 
-    constructor(){
+    constructor() {
         this.isExtension = false;
         this.identity = null;
     }
 
-	loadPlugin(plugin){
-		const noIdFunc = () => { if(!this.identity) throw new Error('No Identity') };
-    	if(!plugin.isValid()) throw new Error(`${plugin.name} doesn't seem to be a valid GScatterJS plugin.`);
+    loadPlugin(plugin) {
+        const noIdFunc = () => { if (!this.identity) throw new Error('No Identity') };
+        if (!plugin.isValid()) throw new Error(`${plugin.name} doesn't seem to be a valid GScatterJS plugin.`);
 
-		PluginRepository.loadPlugin(plugin);
+        PluginRepository.loadPlugin(plugin);
 
-		if(plugin.isSignatureProvider()){
+        if (plugin.isSignatureProvider()) {
             this[plugin.name] = plugin.signatureProvider(noIdFunc, () => this.identity);
-            this[plugin.name+'Hook'] = plugin.hookProvider;
+            this[plugin.name + 'Hook'] = plugin.hookProvider;
         }
-	}
+    }
 
-    async connect(pluginName, options){
-        return new Promise((resolve,reject) => {
-            if(!pluginName || !pluginName.length) throw new Error("You must specify a name for this connection");
+    async connect(pluginName, options = {}) {
+        return new Promise((resolve, reject) => {
+            if (!pluginName || !pluginName.length) throw new Error("You must specify a name for this connection");
 
             // Setting options defaults
-            options = Object.assign({initTimeout:10000, linkTimeout:30000}, options);
+            options = Object.assign({ initTimeout: 10000, linkTimeout: 30000 }, options);
 
             // Auto failer
             setTimeout(() => {
@@ -59,7 +97,7 @@ class Index {
             }, options.initTimeout);
 
             // Defaults to gscatter extension if exists
-            checkForExtension(resolve,reject);
+            checkForExtension(resolve, reject);
 
             // Tries to set up Desktop Connection
             // SocketService.init(pluginName, options.linkTimeout);
@@ -71,73 +109,75 @@ class Index {
         })
     }
 
-    disconnect(){
+    disconnect() {
         return SocketService.disconnect();
     }
 
-    isConnected(){
+    isConnected() {
         return SocketService.isConnected();
     }
 
-    isPaired(){
+    isPaired() {
         return SocketService.isPaired();
     }
 
-    getVersion(){
+    getVersion() {
         return SocketService.sendApiRequest({
-            type:'getVersion',
-            payload:{}
+            type: 'getVersion',
+            payload: {}
         });
     }
 
-    getIdentity(requiredFields){
+    getIdentity(requiredFields) {
+        checkSupport()
+        // throwNoAuth();
+        // return SocketService.sendApiRequest({
+        //     type: 'getOrRequestIdentity',
+        //     payload: {
+        //         fields: requiredFields
+        //     }
+        // }).then(id => {
+        //     if (id) this.identity = id;
+        //     return id;
+        // });
+    }
+
+    getIdentityFromPermissions() {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'getOrRequestIdentity',
-            payload:{
-                fields:requiredFields
-            }
+            type: 'identityFromPermissions',
+            payload: {}
         }).then(id => {
-            if(id) this.identity = id;
+            if (id) this.identity = id;
             return id;
         });
     }
 
-    getIdentityFromPermissions(){
+    forgetIdentity() {
+        checkSupport()
+        // throwNoAuth();
+        // return SocketService.sendApiRequest({
+        //     type: 'forgetIdentity',
+        //     payload: {}
+        // }).then(res => {
+        //     this.identity = null;
+        //     return res;
+        // });
+    }
+
+    authenticate(nonce) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'identityFromPermissions',
-            payload:{}
-        }).then(id => {
-            if(id) this.identity = id;
-            return id;
+            type: 'authenticate',
+            payload: { nonce }
         });
     }
 
-    forgetIdentity(){
+    getArbitrarySignature(publicKey, data, whatfor = '', isHash = false) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'forgetIdentity',
-            payload:{}
-        }).then(res => {
-            this.identity = null;
-            return res;
-        });
-    }
-
-    authenticate(nonce){
-        throwNoAuth();
-        return SocketService.sendApiRequest({
-            type:'authenticate',
-            payload:{ nonce }
-        });
-    }
-
-    getArbitrarySignature(publicKey, data, whatfor = '', isHash = false){
-        throwNoAuth();
-        return SocketService.sendApiRequest({
-            type:'requestArbitrarySignature',
-            payload:{
+            type: 'requestArbitrarySignature',
+            payload: {
                 publicKey,
                 data,
                 whatfor,
@@ -146,63 +186,64 @@ class Index {
         });
     }
 
-    getPublicKey(blockchain){
+    getPublicKey(blockchain) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'getPublicKey',
-            payload:{ blockchain }
+            type: 'getPublicKey',
+            payload: { blockchain }
         });
     }
 
-    linkAccount(publicKey, network){
+    linkAccount(publicKey, network) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'linkAccount',
-            payload:{ publicKey, network }
+            type: 'linkAccount',
+            payload: { publicKey, network }
         });
     }
 
-    hasAccountFor(network){
+    hasAccountFor(network) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'hasAccountFor',
-            payload:{
+            type: 'hasAccountFor',
+            payload: {
                 network
             }
         });
     }
 
-    suggestNetwork(network){
-        throwNoAuth();
-        return SocketService.sendApiRequest({
-            type:'requestAddNetwork',
-            payload:{
-                network
-            }
-        });
+    suggestNetwork(network) {
+        checkSupport()
+        // throwNoAuth();
+        // return SocketService.sendApiRequest({
+        //     type: 'requestAddNetwork',
+        //     payload: {
+        //         network
+        //     }
+        // });
     }
 
-    requestTransfer(network, to, amount, options = {}){
-        const payload = {network, to, amount, options};
+    requestTransfer(network, to, amount, options = {}) {
+        const payload = { network, to, amount, options };
         return SocketService.sendApiRequest({
-            type:'requestTransfer',
+            type: 'requestTransfer',
             payload
         });
     }
 
-    requestSignature(payload){
+    requestSignature(payload) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'requestSignature',
+            type: 'requestSignature',
             payload
         });
     }
 
-    createTransaction(blockchain, actions, account, network){
+    createTransaction(blockchain, actions, account, network) {
         throwNoAuth();
         return SocketService.sendApiRequest({
-            type:'createTransaction',
-            payload:{
+            type: 'createTransaction',
+            payload: {
                 blockchain,
                 actions,
                 account,
@@ -214,54 +255,44 @@ class Index {
 
 
 class Holder {
-    constructor(_gscatter){
+    constructor(_gscatter) {
         this.gscatter = _gscatter;
     }
 
-	plugins(...plugins) {
-		if (!this.gscatter.isExtension) {
-			plugins.map(plugin => this.gscatter.loadPlugin(plugin));
-		}
-    }
-    
-    openExtensionPage(){
+    plugins(...plugins) {
         if (!this.gscatter.isExtension) {
-            if(ua.MOBILE){
+            plugins.map(plugin => this.gscatter.loadPlugin(plugin));
+        }
+    }
+
+    openExtensionPage() {
+        if (!this.gscatter.isExtension) {
+            if (ua.MOBILE) {
                 window.open('https://blockcity.gxb.io/download/');
-            }else if(ua.PC){
+            } else if (ua.PC) {
                 window.open('https://gxchain.github.io/GScatter/arch/guide/');
             }
-		}
+        }
     }
 
-    getEnv(){
-        if(ua.WEB_VIEW){
-            return ENV_WEBVIEW
-        }
-
-        if(ua.MOBILE){
-            return ENV_MOBILE
-        }
-
-        if(ua.PC){
-            return ENV_PC
-        }
+    getEnv() {
+        return getEnvSingleInstance
     }
 }
 
 
 let holder = new Holder(new Index());
-if(typeof window !== 'undefined') {
+if (typeof window !== 'undefined') {
 
     // Catching extension instead of Desktop
-    if(typeof document !== 'undefined'){
+    if (typeof document !== 'undefined') {
         const bindScatterClassic = () => {
             holder.gscatter = window.gscatter;
             holder.gscatter.isExtension = true;
             holder.gscatter.connect = () => new Promise(resolve => resolve(true));
         };
 
-        if(typeof window.gscatter !== 'undefined') bindScatterClassic();
+        if (typeof window.gscatter !== 'undefined') bindScatterClassic();
         else document.addEventListener('gscatterLoaded', () => bindScatterClassic());
     }
 
@@ -273,7 +304,7 @@ holder.PluginTypes = PluginTypes;
 holder.Blockchains = Blockchains;
 holder.Network = Network;
 holder.SocketService = SocketService;
-export {Plugin, PluginTypes, Blockchains, Network, SocketService};
+export { Plugin, PluginTypes, Blockchains, Network, SocketService };
 export default holder;
 
 
