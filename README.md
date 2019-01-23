@@ -340,7 +340,7 @@ if(!GScatterJS.gscatter.isExtension){
 ### Detect Environment
 
 ```javascript
-Gscatter.getEnv()	// return 'webview'、'mobile'、'pc' according to environment
+Gscatter.getEnv((env)=>{console.log(env)})	// return 'blockcity' 'webview'、'mobile'、'pc' according to environment
 ```
 
 

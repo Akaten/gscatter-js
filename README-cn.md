@@ -341,7 +341,7 @@ if(!GScatterJS.gscatter.isExtension){
 ### 检测环境
 
 ```javascript
-Gscatter.getEnv()	// 根据环境返回 'webview'、'mobile'、'pc'
+Gscatter.getEnv((env)=>{console.log(env)})	// 根据环境返回 'blockcity' 'webview'、'mobile'、'pc'
 ```
 
 
@@ -446,3 +446,59 @@ gxc.transfer('toAccount', 'memo info', '1 GXC', true, {requiredFields}).then(trx
 暂时不支持在布洛克城上调试，你可以先在浏览器上调试，布洛克城做好了语法兼容。
 
 如果遇到问题，可以反馈给开发，或者用[vConsole](https://github.com/Tencent/vConsole)
+
+
+
+## 其它平台兼容GScatter
+
+由于GScatter本质上只是一组语法，任何平台都可以根据该语法去实现对应的插件，就像meetone实现Scatter插件一样。
+
+如果想在webview里面实现插件，可以参考[gscatter-blockcity-inject](https://github.com/gxchain/blockcity-gscatter-inject)。
+
+**需要注意的是：**
+
+1.输入输出一定要一致，交互不一定一致
+
+2.含义一致的错误码，请保持跟上述文档 `错误码` 部分一致。
+
+
+
+### 低版本不支持
+
+你的产品可能从1.0.0版本开始支持GScatter语法的应用，而1.0.0版本以下不支持。
+
+这时候你会希望给低版本用户一些提示。
+
+我们提供的解决办法是：
+
+在webview的`window`对象里面注入`isSupportGScatter `和`notSupportGScatterCallback`，`gscatterjs-core`会自动去调用`window.isSupportGScatter(window.notSupportGScatterCallback) `。
+
+比如布洛克城中就注入了如下的代码：
+
+```javascript
+function blockcityGlobalInject() {
+    window.isSupportGScatter = function (failCallback) {
+        getDeviceInfo((result) => {
+            const version = result.version
+            // if less than 2.0.3, not support gscatter
+            if (!compareVersion('2.0.3', version)) {
+                failCallback(result)
+            }
+        })
+    }
+
+    window.notSupportGScatterCallback = function (appInfo) {
+        alert(i18n('not_support', appInfo.appLanguage))
+    }
+}
+```
+
+
+
+如果你的产品之前的版本并没有在webview中注入可以方便配置的脚本，那么可以开放一个GScatter应用专区，或者在url上加上GScatter的标识，来标注GScatter应用，然后再在这些webview里面判断当前版本是否支持GScatter。
+
+
+
+### 获取当前环境
+
+开发者可能根据不同的平台，做一些适配，那么他需要知道当前的使用环境，你可以在`window`对象中注入`GSCATTER_ENV`，那么开发者通过`getEnv`取到的值就会是你注入的值。
