@@ -175,9 +175,6 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
 
 
 ### Logout
-
-**blockcity**: not support real logout, if call `forgetIdentity` , will throw an error.
-
 ```javascript
 let gscatter;
 
@@ -197,7 +194,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
             gscatter.forgetIdentity();
             clearAccountInfo()
         } catch (err) {
-            // On pc browser may cause of no identity；On blockcity must throw error.
+            // On pc browser may cause of no identity
             console.error(err)
         }
     }

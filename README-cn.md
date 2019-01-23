@@ -176,9 +176,6 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
 
 
 ### 登出
-
-**布洛克城**: 不支持登出，如果调用`forgetIdentity` ，会抛出一个错误。
-
 ```javascript
 let gscatter;
 
@@ -198,7 +195,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
             gscatter.forgetIdentity();
             clearAccountInfo()
         } catch (err) {
-            // 在pc浏览器上可能是因为没有身份；在布洛克城一定会抛错
+            // 在pc浏览器上可能是因为没有身份
             console.error(err)
         }
     }
