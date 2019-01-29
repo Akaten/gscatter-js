@@ -274,10 +274,6 @@ class Holder {
             }
         }
     }
-
-    getEnv() {
-        return getEnvSingleInstance
-    }
 }
 
 
