@@ -334,15 +334,6 @@ if(!GScatterJS.gscatter.isExtension){
 ```
 
 
-
-### 检测环境
-
-```javascript
-Gscatter.getEnv((env)=>{console.log(env)})	// 根据环境返回 'blockcity' 'webview'、'mobile'、'pc'
-```
-
-
-
 ### 错误码
 
 你可以根据下列的错误码处理异常：
@@ -493,9 +484,3 @@ function blockcityGlobalInject() {
 
 
 如果你的产品之前的版本并没有在webview中注入可以方便配置的脚本，那么可以开放一个GScatter应用专区，或者在url上加上GScatter的标识，来标注GScatter应用，然后再在这些webview里面判断当前版本是否支持GScatter。
-
-
-
-### 获取当前环境
-
-开发者可能根据不同的平台，做一些适配，那么他需要知道当前的使用环境，你可以在`window`对象中注入`GSCATTER_ENV`，那么开发者通过`getEnv`取到的值就会是你注入的值。

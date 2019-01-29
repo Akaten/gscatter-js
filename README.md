@@ -333,15 +333,6 @@ if(!GScatterJS.gscatter.isExtension){
 ```
 
 
-
-### Detect Environment
-
-```javascript
-Gscatter.getEnv((env)=>{console.log(env)})	// return 'blockcity' 'webview'、'mobile'、'pc' according to environment
-```
-
-
-
 ### Error Codes
 
 You can handle error according to the error code below:
