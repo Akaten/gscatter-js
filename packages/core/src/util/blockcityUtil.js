@@ -18,7 +18,8 @@ export function blockcityGlobalInject() {
         })
     }
 
-    window.notSupportGScatterCallback = function (appInfo) {
+    // allow developer overide
+    window.notSupportGScatterCallback = window.notSupportGScatterCallback || function (appInfo) {
         alert(i18n('not_support', appInfo.appLanguage))
     }
 }
