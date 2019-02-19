@@ -1,6 +1,6 @@
 {
     "name": "gscatterjs-core",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "main": "dist/index.js",
     "license": "MIT",
     "scripts": {
@@ -10,8 +10,8 @@
         "create-hash": "^1.2.0",
         "es6-promise": "^4.2.4",
         "get-random-values": "^1.2.0",
+        "gxc-frontend-base": "^0.1.4",
         "isomorphic-ws": "^4.0.1",
-        "ws": "^6.1.0",
-        "gxc-frontend-base": "^0.1.4"
+        "ws": "^6.1.0"
     }
 }
