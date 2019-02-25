@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>gscatter test page</title>
     <script src="../../bundles/gscatterjs-core.min.js"></script>
     <!-- <script src="../../packages/core/build/bundle.js"></script> -->
@@ -22,6 +23,7 @@
     <button onclick="getBalance()">Get Balance</button>
     <button onclick="getIdentity()">getIdentity</button>
     <button onclick="checkExtension()">Check Extension</button>
+    <button onclick="checkNativeDep()">Check Native Dep</button>
     <!-- <img src="https://edmullen.net/test/rc.jpg" alt=""> -->
     <script>
         const network = {
@@ -188,6 +190,24 @@
                     // if installed, nothing hapen
                     GScatterJS.openExtensionPage()
                 }
+            }
+        }
+
+        // if demo can not run, you could check this first
+        window.checkNativeDep = async() => {
+            const errors = []
+            const identity = await GScatterJS.gscatter.getIdentity()
+            if(!identity) {
+                errors.push('identity can not get')
+            }
+
+            const witness = await GScatterJS.gscatter._getWitness()
+            if(!witness) {
+                errors.push('witness can not get')
+            }
+
+            if(errors.length > 0){
+                alert(errors.join('\n'))
             }
         }
     </script>
