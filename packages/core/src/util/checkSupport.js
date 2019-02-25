@@ -1,4 +1,6 @@
-
+/**
+ * check whether current version support gscatter
+ */
 function placeholder() { }
 
 export default function checkSupport() {

@@ -23,3 +23,28 @@ export function blockcityGlobalInject() {
         alert(i18n('not_support', appInfo.appLanguage))
     }
 }
+
+/**
+ * whether is blockcity webview
+ * @returns {Boolean}
+ */
+export function detectBlockcityWebview() {
+    // if timeout, means not in blockcity webview
+    const timeoutPromise = new Promise(function(resolve){
+        setTimeout(function(){
+            resolve(false)
+        }, 1000)
+    })
+
+    const blockcityDetectPromise = new Promise(function (resolve) {
+        getDeviceInfo((result) => {
+            const appName = (result.appName || '').toLowerCase()
+            if (appName === 'blockcity' || (appName === 'blockcityglobal')) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        })
+    })
+    return Promise.race([timeoutPromise, blockcityDetectPromise])
+}

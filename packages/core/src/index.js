@@ -5,9 +5,8 @@ import * as PluginTypes from './plugins/PluginTypes';
 import { Blockchains } from './models/Blockchains';
 import Network from './models/Network';
 import UserAgent from 'gxc-frontend-base/src/script/util/ua'
-import { blockcityGlobalInject } from './util/blockcityUtil'
+import { blockcityGlobalInject, detectBlockcityWebview } from './util/blockcityUtil'
 import checkSupport from './util/checkSupport'
-import { GSCATTER_ENV } from './const/global'
 
 export const ENV_WEBVIEW = 'webview'
 export const ENV_MOBILE = 'mobile'
@@ -18,9 +17,12 @@ const ua = new UserAgent()
 const getEnv = () => {
     return new Promise((resolve) => {
         // waiting host to inject global variable
-        setTimeout(() => {
-            if (!window[GSCATTER_ENV] && ua.WEB_VIEW) {
-                resolve(ENV_BLOCKCITY)
+        setTimeout(async () => {
+            if (ua.WEB_VIEW) {
+                const flag = await detectBlockcityWebview()
+                if (flag) {
+                    resolve(ENV_BLOCKCITY)
+                }
             }
 
             if (ua.WEB_VIEW) {
