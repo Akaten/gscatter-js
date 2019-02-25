@@ -1,1 +1,3 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=checkSupport;function placeholder(){}function checkSupport(){window.isSupportGScatter=window.isSupportGScatter||placeholder,window.notSupportGScatterCallback=window.notSupportGScatterCallback||placeholder,window.isSupportGScatter(window.notSupportGScatterCallback)}
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=checkSupport;/**
+ * check whether current version support gscatter
+ */function placeholder(){}function checkSupport(){window.isSupportGScatter=window.isSupportGScatter||placeholder,window.notSupportGScatterCallback=window.notSupportGScatterCallback||placeholder,window.isSupportGScatter(window.notSupportGScatterCallback)}
