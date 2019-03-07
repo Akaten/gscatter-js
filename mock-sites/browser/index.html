@@ -117,7 +117,7 @@
         }
 
         window.vote = () => {
-            gxc.vote(['math-wallet-test', 'gxc-pacific'], 'GXC', true).then(trx => {
+            gxc.vote(['math-wallet-test', 'gxc-pacific'], true).then(trx => {
                 console.log(`vote success`, trx);
             }).catch(error => {
                 console.error(error);
