@@ -268,12 +268,10 @@ class Holder {
     }
 
     openExtensionPage() {
-        if (!this.gscatter.isExtension) {
-            if (ua.MOBILE) {
-                window.open('https://blockcity.gxb.io/download/');
-            } else if (ua.PC) {
-                window.open('https://gxchain.github.io/GScatter/arch/guide/');
-            }
+        if (ua.MOBILE) {
+            window.open('https://blockcity.gxb.io/download/');
+        } else if (ua.PC) {
+            window.open('https://gxchain.github.io/GScatter/arch/guide/');
         }
     }
 }

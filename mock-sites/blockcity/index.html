@@ -54,7 +54,7 @@
         } else if (env === 'test') {
             testData = {
                 account1: 'lzydophin94',
-                callContractParams: ['bank', 'deposit', {}, '1 GXC', true]
+                callContractParams: ['heyue123', 'hi', { user: '刘宗源' }, '', true]
             }
         } else { // 线上
             testData = {
@@ -124,7 +124,7 @@
 
         window.transfer = async () => {
             // if user don't have these requiredFields, the operation would be cancel, and go to catch area
-            gxc.transfer(testData.account1, 'memo info', '1 GXC', true).then(trx => {
+            gxc.transfer(testData.account1, 'memo info', '1 GXC', true, { fee_symbol: 'BTC' }).then(trx => {
                 output(`transfer success`, trx)
             }).catch(error => {
                 output(error)
@@ -140,7 +140,7 @@
         }
 
         window.vote = () => {
-            gxc.vote(['init0', 'init2'], 'GXC', true).then(trx => {
+            gxc.vote(['init0', 'init2'], 'GXC', true, { fee_symbol: 'BTC' }).then(trx => {
                 output(`vote success`, trx)
             }).catch(error => {
                 output(error)
@@ -194,19 +194,19 @@
         }
 
         // if demo can not run, you could check this first
-        window.checkNativeDep = async() => {
+        window.checkNativeDep = async () => {
             const errors = []
             const identity = await GScatterJS.gscatter.getIdentity()
-            if(!identity) {
+            if (!identity) {
                 errors.push('identity can not get')
             }
 
             const witness = await GScatterJS.gscatter._getWitness()
-            if(!witness) {
+            if (!witness) {
                 errors.push('witness can not get')
             }
 
-            if(errors.length > 0){
+            if (errors.length > 0) {
                 alert(errors.join('\n'))
             }
         }
@@ -219,7 +219,7 @@
             const inject = document.createElement('script')
 
             // puer -p 9999 --no-reload
-            inject.setAttribute('src', 'http://192.168.100.30:9999/dev/inject.js')
+            inject.setAttribute('src', 'http://192.168.100.40:9999/dev/inject.js')
 
             document.body.appendChild(inject)
         }

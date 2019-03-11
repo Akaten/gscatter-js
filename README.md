@@ -325,8 +325,7 @@ If in chrome, user may not have the extension, you can invite him/her to downloa
 if(!GScatterJS.gscatter.isExtension){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
-        // if installed, nothing hapen
-        // if not installed, jump to install page according to environment
+        // jump to install page according to environment
         GScatterJS.openExtensionPage()
     }
 }

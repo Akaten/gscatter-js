@@ -326,8 +326,7 @@ gxc.transfer('toAccount', 'memo info', '1 GXC', true, {requiredFields}).then(trx
 if(!GScatterJS.gscatter.isExtension){
     var flag = confirm('You haven\'t download extension, confirm to download')
     if(flag){
-        // 如果已经安装过，则不会有任何反应
-        // 如果没有安装过, 则会根据当前环境跳转到安装页面
+        // 会根据当前环境跳转到安装页面
         GScatterJS.openExtensionPage()
     }
 }
