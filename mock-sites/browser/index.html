@@ -18,6 +18,7 @@
     <button onclick="queryAccount()">Query Account By Name</button>
     <button onclick="getBalance()">Get Balance</button>
     <button onclick="checkExtension()">Check Extension</button>
+    <button onclick="getArbitrarySignature()">getArbitrarySignature</button>
 
     <script>
         const network = {
@@ -151,6 +152,17 @@
                     // if installed, nothing hapen
                     GScatterJS.openExtensionPage()
                 }
+            }
+        }
+
+        window.getArbitrarySignature = async () => {
+            const publicKey = gscatter.identity.publicKey
+
+            try{
+                const sig = await gscatter.getArbitrarySignature(publicKey, 'max data size is 64 byte')
+                console.log(sig)
+            }catch(err){
+                console.log(err)
             }
         }
     </script>
