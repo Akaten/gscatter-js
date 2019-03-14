@@ -203,6 +203,29 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(connected => {
 
 
 
+### getArbitrarySignature
+
+```javascript
+let gscatter;
+
+GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
+    if(!connected) {
+        return false;
+    }
+    
+    gscatter = GScatterJS.gscatter;
+    
+	const publicKey = gscatter.identity.publicKey
+
+    try{
+        const sig = await gscatter.getArbitrarySignature(publicKey, 'max data size is 64 byte')
+        console.log(sig)
+    }catch(err){
+        console.log(err)
+    }
+});
+```
+
 
 
 
