@@ -288,7 +288,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
        ...
     }
        
-    transfer.click = async function(){
+    transfer.onclick = async function(){
         // 在pc浏览器上，如果没有解锁，会提示解锁；如果没有授权过，会提示授权；如果已经授权过，那么会弹出交易确认的提示框。
  		gxc.transfer('toAccount', 'memo info', '1 GXC', true).then(trx => {
                 console.log(`transfer success`, trx);
