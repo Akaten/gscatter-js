@@ -289,7 +289,7 @@ GScatterJS.gscatter.connect("Put_Your_App_Name_Here").then(async connected => {
        ...
     }
        
-    transfer.click = async function(){
+    transfer.onclick = async function(){
         // On pc browser, if doesn't unlock, it would display unlock prompt; if doesn't login, it would display authorize prompt; if already login, it would display operation confirm prompt
  		gxc.transfer('toAccount', 'memo info', '1 GXC', true).then(trx => {
                 console.log(`transfer success`, trx);
